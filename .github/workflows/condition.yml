@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
-          path: *.json
+          path: test.json
   deploy:
     needs: [lint, test]
     runs-on: ubuntu-latest
