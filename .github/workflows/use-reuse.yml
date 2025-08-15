@@ -1,4 +1,4 @@
-name: Condition for Artifacts
+name: Use Reuse
 on: push
 jobs:
   lint:
