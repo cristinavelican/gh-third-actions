@@ -1,4 +1,4 @@
-name: Lint, test and deploy
+name: Condition for Artifacts
 on: push
 jobs:
   lint:
