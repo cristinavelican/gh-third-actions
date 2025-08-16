@@ -46,7 +46,7 @@ jobs:
           name: test-reports
           path: test.json
   deploy:
-    needs: [lint, test]
+    needs: [ test]
     runs-on: ubuntu-latest
     steps:
       - name: Get code
