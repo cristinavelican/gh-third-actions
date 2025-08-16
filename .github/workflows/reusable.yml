@@ -1,5 +1,14 @@
 name: Reusable deploy
-on: workflow_call
+on: 
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: Name of the artifact to deploy
+        required: true
+        type: string
+    secrets:
+      some-secret:
+        required: false
 jobs:
   deploy:
     runs-on: ubuntu-latest

@@ -1,0 +1,62 @@
+name: Container
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: node:18
+    env:
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      MONGODB_CLUSTER_ADDRESS: mongodb
+      MONGODB_PASSWORD: example
+      MONGODB_USERNAME: root' 
+      PORT: 8080 
+    services: 
+      mongodb: 
+        image: mongo
+        env: 
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-module-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run tests
+        id: test
+        continue-on-error: true
+        run: npm run test
+      - name: Output test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: test.json
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Deploy to server
+        run: echo "Deploying to server..."  
+  

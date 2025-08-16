@@ -42,8 +42,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
-          path: test.json
+          path: dist
   deploy:
     needs: [lint, test]
     uses: ./.github/workflows/reusable.yml
+    secrets:
+      some-secret: ${{ secrets.NODE_AUTH_TOKEN }}
+    
   
